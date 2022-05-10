@@ -1,7 +1,8 @@
-// tt-browser-api (TBA)
-// a thing by pixelcrisis
-// browser API for turntable.fm
-class TBA {}
+class TBA {
+	// tt-browser-api (TBA) - a thing by pixelcrisis
+	// a browser API for interacting with turntable.fm
+	constructor() { this.Debug("Initialized") }
+}
 
 // first things first, import the realest
 // aka all of our scripts and build out the function

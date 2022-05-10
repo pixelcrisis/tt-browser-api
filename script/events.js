@@ -13,11 +13,10 @@ module.exports = TBA => {
 	}
 
 	TBA.prototype.Emit = function (name, ...args) {
-		if (!this.events) return this.Debug("No Event List")
-		if (!this.events[name]) return this.Debug(`No Events: ${ name }`)
-		// fire functions bound to event
-		for (let func of list) {
-			// attempt to handle errors
+		let list = this.events ? this.events[name] : false
+		// fire functions bound to the event list
+		if (list) for (let func of list) {
+			// attempt to handle errors with try / catch
 			try { func(...args) }
 			catch (e) { 
 				// print out where we failed
@@ -26,6 +25,8 @@ module.exports = TBA => {
 				this.Error(`${ head } - ${ text }`, e)
 			}
 		}
+		else this.Debug(`No Events: ${ name }`)
+		
 	}
 
 }
