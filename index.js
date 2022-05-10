@@ -7,6 +7,7 @@ class TBA {}
 // aka all of our scripts and build out the function
 // require the script, and pass the API library
 require("./script/logger.js")(TBA)
+require("./script/bridge.js")(TBA)
 require("./script/events.js")(TBA)
 require("./script/listen.js")(TBA)
 require("./script/attach.js")(TBA)
@@ -14,7 +15,7 @@ require("./script/attach.js")(TBA)
 // add our current version because it's cool
 const pkg = require("./package.json")
 TBA.prototype.api_version = pkg.version
-// remove for production, obviously
+// remove in production, obviously
 TBA.prototype.debugs = true
 
 // export the library

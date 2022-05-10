@@ -24,6 +24,7 @@ module.exports = TBA => {
 		core.addEventListener("message", this.listener)
 		this.Debug("Attached To Room", room)
 		// add access points to turntable
+		this.$main = window.turntable
 		this.$user = window.turntable.user
 		this.$view = window.turntable.topViewController
 		this.$room = window.turntable.topViewController.roomData

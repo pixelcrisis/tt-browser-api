@@ -2,6 +2,7 @@
 // handles printing logs
 
 module.exports = TBA => {
+	
 	TBA.prototype.Debug = function (text, data) {
 		this.logged("debug", text, data)
 	}
