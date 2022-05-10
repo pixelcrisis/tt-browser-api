@@ -25,8 +25,6 @@ module.exports = TBA => {
 				this.Error(`${ head } - ${ text }`, e)
 			}
 		}
-		else this.Debug(`No Events: ${ name }`)
-		
 	}
 
 }

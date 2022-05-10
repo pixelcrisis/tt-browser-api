@@ -16,6 +16,7 @@ module.exports = TBA => {
 	}
 
 	TBA.prototype._attached = function () {
+		this.cacheInit() // build cache
 		// bind our listener to turntable
 		this.$bind = this.Listen.bind(this)
 		this.$core.addEventListener("message", this.$bind)
@@ -39,13 +40,13 @@ module.exports = TBA => {
 	}
 
 	TBA.prototype._loadCore = function () {
-		// don't check if we already have
-		if (this.$core) return this.$core
 		if (!this.loading) this._initLoad()
-		// if turntable doesn't exist, what do?
-		if (!window.turntable) return this._loadFail()
 		// we can only do like....3 things in the lobby
 		if ($( LOBBY ).length) return this._loadLobby()
+		// don't check if we already have
+		if (this.$core) return this.$core
+		// if turntable doesn't exist, what do?
+		if (!window.turntable) return this._loadFail()
 		// but hey, now we can find our room
 		this.Debug("Looking For Room...")
 		this.$core = window.turntable

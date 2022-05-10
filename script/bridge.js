@@ -17,4 +17,11 @@ module.exports = TBA => {
 		return id
 	}
 
+	TBA.prototype.hasPing = function (str) {
+		// just checks a string for an us ping
+		let list = str.split(" ") // per word
+		let ping = `@${ this.$user.attributes.name }`
+		return list.indexOf(ping) > -1
+	}
+
 }

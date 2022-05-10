@@ -3,6 +3,8 @@
 
 module.exports = function (event) {
 	for (let user of event.user) {
-		this.Debug(`join: ${ user.name }`, user)
+		let data = { user, raw: event }
+		this.Debug(`[join] ${ user.name }`, data)
+		this.Emit("join", data)
 	}
 }

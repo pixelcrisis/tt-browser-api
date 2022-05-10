@@ -11,6 +11,7 @@ require("./script/logger.js")(TBA)
 require("./script/bridge.js")(TBA)
 require("./script/events.js")(TBA)
 require("./script/listen.js")(TBA)
+require("./script/cached.js")(TBA)
 require("./script/attach.js")(TBA)
 
 // add our current version because it's cool
