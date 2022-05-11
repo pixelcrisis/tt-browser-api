@@ -20,6 +20,7 @@ module.exports = TBA => {
 		// bind our listener to turntable
 		this.$bind = this.Listen.bind(this)
 		this.$core.addEventListener("message", this.$bind)
+		this.bindMutations() // our DOM watcher
 		// return the room name and listeners
 		let named = this.$room.name
 		let count = this.$view.numListeners()
