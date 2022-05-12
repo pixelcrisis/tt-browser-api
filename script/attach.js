@@ -12,7 +12,7 @@ module.exports = TBA => {
 		// bind access to turntable
 		let [ named, count ] = this._attached()
 		this.Print(`Attached to ${ named } (${ count } Users)`)
-		this.Emit("attach", this.$room)
+		this.Emit("attach", { room: this.$room })
 	}
 
 	TBA.prototype._attached = function () {
@@ -21,6 +21,7 @@ module.exports = TBA => {
 		this.$bind = this.Listen.bind(this)
 		this.$core.addEventListener("message", this.$bind)
 		this.bindMutations() // our DOM watcher
+		this.bindLooped() // our internal ticker
 		// return the room name and listeners
 		let named = this.$room.name
 		let count = this.$view.numListeners()
@@ -38,6 +39,7 @@ module.exports = TBA => {
 		// who knows how long it'll take?
 		this.Debug("Finding Turntable...")
 		this.loading = true
+		this.Emit("load")
 	}
 
 	TBA.prototype._loadCore = function () {

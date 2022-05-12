@@ -13,6 +13,7 @@ require("./script/events.js")(TBA)
 require("./script/listen.js")(TBA)
 require("./script/mutate.js")(TBA)
 require("./script/cached.js")(TBA)
+require("./script/looped.js")(TBA)
 require("./script/attach.js")(TBA)
 
 // add our current version because it's cool

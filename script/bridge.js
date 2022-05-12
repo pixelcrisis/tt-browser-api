@@ -2,6 +2,9 @@
 // communicating with turntable
 
 module.exports = TBA => {
+
+	TBA.prototype.Jump = () => window.turntable.topViewController.becomeDj()
+	TBA.prototype.Drop = () => window.turntable.topViewController.quitDj()
 	
 	TBA.prototype.getName = function (id) {
 		id = id || "Unknown"
