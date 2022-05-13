@@ -81,6 +81,29 @@ bind a function to a named event
 `Emit(name, arguments)`   
 fire all functions bound to an event
 
+`Chat(text)`   
+send a real message to the room chat
+
+`Post(text, subject, type)`   
+add a fake message to the chat tab
+--- `subject` is the bold prefix in chat  
+--- `type` is a class added to the message  
+
+`Batch(array)`   
+sends multiple (max 3) messages to turntable
+--- `array` is an array of strings to send
+
+`Notify(head, text, icon, type)`
+sends a desktop notification  
+--- must be enabled with `new TBA({ enableNotify: true })`  
+--- `head` is the title of the notification [req]  
+--- `text` is the main text of the notification [req]  
+--- `icon` is the notificaion icon (recommended)  
+--- `type` will enable a delay to prevent notification spam
+
+`Bully(head, text, icon, type)`   
+sends both a Post and  Notification
+
 `Attach()`   
 attempt to attach to turntable
 

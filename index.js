@@ -1,7 +1,10 @@
 class TBA {
 	// tt-browser-api (TBA) - a thing by pixelcrisis
 	// a browser API for interacting with turntable.fm
-	constructor() { this.Debug("Initialized") }
+	constructor(conf = {}) { 
+		Object.apply(this, conf)
+		this.Debug("Initialized") 
+	}
 }
 
 // first things first, import the realest
@@ -12,6 +15,7 @@ require("./script/events.js")(TBA)
 require("./script/looped.js")(TBA)
 require("./script/cached.js")(TBA)
 require("./script/bridge.js")(TBA)
+require("./script/notify.js")(TBA)
 require("./script/attach.js")(TBA)
 
 // add our current version because it's cool
