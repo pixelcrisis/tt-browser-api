@@ -1,5 +1,5 @@
 # tt-browser-api
-Interfacing with turntable.fm in the browser.
+Interfacing with turntable.fm in the browser. Handles the heavy lifting for integrating with turntable events and functions, as well as manipulating the site itself. In the future, it will be powerful enough to use the browser to run a bot on turntable.fm. 
 
 ## [ using the api ]
 ```js
@@ -11,126 +11,10 @@ let App = new TBA()
 App.Attach() // attach to turntable
 ````
 
-## [ native events ]
+## [ projects using TBA ]
 
-`jump` - replaces *add_dj*  
-returns `{ user, raw }`
+### [turnStyles](https://github.com/pixelcrisis/turnstyles)
 
-`drop` - replaces *rem_dj*  
-returns `{ user, stat, raw }`  
---- `stat: { love, hate, snag, spun }`
+## [ getting started ]
 
-`join` - replaces *registered*  
-returns `{ user, raw }`
-
-`left` - replaces *deregistered*  
-returns `{ user, raw }`
-
-`snag` - replaces *snagged*  
-returns `{ user, raw }`
-
-`vote` - replaces *update_votes*  
-returns `{ user, vote, list, raw }`  
---- `vote` is the vote value, usually "up"  
---- `list` is the entire votelog, `user` is the last entry  
-
-`mail` - replaces *pmmed*  
-returns `{ user, text, raw }`
-
-`chat` - replaces *speak*  
-returns `{ user, text, ping, self, raw }`  
---- `ping` is a boolean, true if you've been pinged  
---- `self` is a boolean, true if you sent the message  
-
-`song` - replaces *nosong* and *newsong*  
-returns `{ song, last, raw }`  
---- `song` is the current song playing  
---- `last` is the last played song, with `stat` tracking  
-
-## [ custom events ]
-
-`list`, on playlist change  
-returns `{ name, list }`
-
-`text`, on new chat message added  
-returns `{ elem }`
-
-`type`, on tt typeahead appear/disappear  
-returns `null`
-
-`user`, on new profile appearance  
-returns `{ user }`
-
-`loop`, incremented by 1 every minute   
-returns `{ beat }`
-
-`load`, after being added to the HTML  
-returns `null`
-
-`lobby`, found the lobby instead on attach  
-returns `null`
-
-`attach`, successfully attached to fully loaded room  
-returns `{ room } `
-
-## [ functions ]
-
-`On(event, function)`   
-bind a function to a named event
-
-`Emit(name, arguments)`   
-fire all functions bound to an event
-
-`Chat(text)`   
-send a real message to the room chat
-
-`Post(text, subject, type)`   
-add a fake message to the chat tab
---- `subject` is the bold prefix in chat  
---- `type` is a class added to the message  
-
-`Batch(array)`   
-sends multiple (max 3) messages to turntable
---- `array` is an array of strings to send
-
-`Notify(head, text, icon, type)`
-sends a desktop notification  
---- must be enabled with `new TBA({ enableNotify: true })`  
---- `head` is the title of the notification [req]  
---- `text` is the main text of the notification [req]  
---- `icon` is the notificaion icon (recommended)  
---- `type` will enable a delay to prevent notification spam
-
-`Bully(head, text, icon, type)`   
-sends both a Post and  Notification
-
-`Attach()`   
-attempt to attach to turntable
-
-`Jump()`  
-provides access to `.becomeDj()`
-
-`Drop()`  
-provides access to `.quitDj()`
-
-`getName(id)`  
-return a user name from ID
-
-`hasPing(str)`  
-check a string for a ping
-
-`Debug(log, data)`   
-prints debug logs if we're debugging
-
-`Print(log, data)`  
-always print a log to the console
-
-`Error(log, data)`  
-print a red log to the console
-
-## [ properties ]
-
-`$core` - window.turntable  
-`$user` - window.turntable.user  
-`$view` - window.turntable.topViewController  
-`$room` - window.turntable.topViewController.roomData  
+Check Out The Docs Folder For Overviews!

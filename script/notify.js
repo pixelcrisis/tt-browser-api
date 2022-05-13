@@ -5,7 +5,6 @@ module.exports = TBA => {
 
 	TBA.prototype.Notify = function (head, text, icon, type) {
 		// send a desktop notification from turntable
-		if (!this.enableNotify) return // not enabled
 		if (!head || !text) return // sending what?
 		if (!this.canNotify() || document.hasFocus()) return
 		// wrap in a function for use with delay
