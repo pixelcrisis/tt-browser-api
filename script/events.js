@@ -27,4 +27,8 @@ module.exports = TBA => {
 		}
 	}
 
+	// import listener/mutate events
+	require("./events/listen.js")(TBA)
+	require("./events/mutate.js")(TBA)
+
 }

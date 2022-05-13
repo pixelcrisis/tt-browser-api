@@ -29,9 +29,9 @@ module.exports = TBA => {
 		Watcher.observe(document, { subtree: true, childList: true })
 	}
 
-	TBA.prototype._onList = require("../mutate/onList.js")
-	TBA.prototype._onText = require("../mutate/onText.js")
-	TBA.prototype._onType = require("../mutate/onType.js")
-	TBA.prototype._onUser = require("../mutate/onUser.js")
+	TBA.prototype._onList = require("./mutate/onList.js")
+	TBA.prototype._onText = require("./mutate/onText.js")
+	TBA.prototype._onType = require("./mutate/onType.js")
+	TBA.prototype._onUser = require("./mutate/onUser.js")
 
 }

@@ -22,14 +22,14 @@ module.exports = TBA => {
 		return this.Emit(name, { raw: event })
 	}
 
-	TBA.prototype._onChat = require("../listen/onChat.js")
-	TBA.prototype._onMail = require("../listen/onMail.js")
-	TBA.prototype._onJump = require("../listen/onJump.js")
-	TBA.prototype._onDrop = require("../listen/onDrop.js")
-	TBA.prototype._onSong = require("../listen/onSong.js")
-	TBA.prototype._onSnag = require("../listen/onSnag.js")
-	TBA.prototype._onVote = require("../listen/onVote.js")
-	TBA.prototype._onJoin = require("../listen/onJoin.js")
-	TBA.prototype._onLeft = require("../listen/onLeft.js")
+	TBA.prototype._onChat = require("./listen/onChat.js")
+	TBA.prototype._onMail = require("./listen/onMail.js")
+	TBA.prototype._onJump = require("./listen/onJump.js")
+	TBA.prototype._onDrop = require("./listen/onDrop.js")
+	TBA.prototype._onSong = require("./listen/onSong.js")
+	TBA.prototype._onSnag = require("./listen/onSnag.js")
+	TBA.prototype._onVote = require("./listen/onVote.js")
+	TBA.prototype._onJoin = require("./listen/onJoin.js")
+	TBA.prototype._onLeft = require("./listen/onLeft.js")
 
 }
