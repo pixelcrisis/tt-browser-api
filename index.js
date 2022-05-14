@@ -1,7 +1,15 @@
 class TBA {
-	// tt-browser-api (TBA) - a thing by pixelcrisis
-	// a browser API for interacting with turntable.fm
-	constructor(conf = {}) { this.Debug("Initialized") }
+	// tt-browser-api (TBA) 
+	// a thing by pixelcrisis
+	// for handling turntable.fm
+	constructor(options = {}) { 
+		const pkg = require("./package.json")
+		this.name = options.name || "TBA"
+		this.version = options.version || pkg.version
+		this.api_version = pkg.version
+		this.debugging = options.debugging || false
+		this.Debug("Initialized")
+	}
 }
 
 // first things first, import the realest
@@ -15,12 +23,6 @@ require("./script/bridge.js")(TBA)
 require("./script/notify.js")(TBA)
 require("./script/insert.js")(TBA)
 require("./script/attach.js")(TBA)
-
-// add our current version because it's cool
-const pkg = require("./package.json")
-TBA.prototype.api_version = pkg.version
-// remove in production, obviously
-TBA.prototype.debugs = true
 
 // export the library
 module.exports = TBA
