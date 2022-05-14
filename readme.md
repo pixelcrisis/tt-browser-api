@@ -5,19 +5,19 @@ Interfacing with turntable.fm in the browser. Handles the heavy lifting for inte
 ```js
 let TBA = require("tt-browser-api")
 let App = new TBA({
-	name: "App", // change the logging prefix
-	version: require("./package.json").version,
-	debugging: false // true for more logs
+  name: "App", // change the logging prefix
+  version: require("./package.json").version,
+  debugging: false // true for more logs
 })
 
 // add your functions
 App.doThing = function () {
-	// some logic
+  // some logic
 }
 
 // bind your events
 App.On("chat", function (event) {
-	console.log(event)
+  console.log(event)
 })
 
 // get started
@@ -30,4 +30,4 @@ App.Attach()
 
 ## [ getting started ]
 
-Check Out The Docs Folder For Overviews!
+Check Out [The Docs Folder](docs/) For Overviews!
