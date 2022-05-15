@@ -15,6 +15,15 @@ module.exports = TBA => {
 		this.Emit("attach", { room: this.$room })
 	}
 
+	TBA.prototype.Detach = function () {
+		// un bind and remove
+		this.Debug(`Detaching...`)
+		clearInterval(this.loop)
+		this.__watch.disconnect()
+		this.$core.removeEventListener("message", this.__event)
+		this.Print(`Detached`)
+	}
+
 	TBA.prototype._attached = function () {
 		this.cacheInit() // build cache
 		// bind our listener to turntable

@@ -25,8 +25,8 @@ module.exports = TBA => {
 	TBA.prototype.bindMutations = function () {
 		let Observe = window.MutationObserver
 		if (!Observe) Observe = WebKitMutationObserver
-		let Watcher = new Observe(this.Mutate.bind(this))
-		Watcher.observe(document, { subtree: true, childList: true })
+		this.__watch = new Observe(this.Mutate.bind(this))
+		this.__watch.observe(document, { subtree: true, childList: true })
 	}
 
 	TBA.prototype._onList = require("./mutate/onList.js")

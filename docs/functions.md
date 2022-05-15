@@ -14,6 +14,7 @@ Function | Notes
 Function | Notes
 -------- | -----
 `Attach()` | attempt to attach to turntable
+`Detach()` | detaches and unbinds itself from tt events
 `On(event, function)` | bind a function to named event
 `Emit(name, args)` | emit functions bound to event name
 `Post(text, subject, type)` | add a fake message to the chat<br />`subject` is the bold prefix<br />`type` is a class added to the message
