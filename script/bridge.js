@@ -51,6 +51,14 @@ module.exports = TBA => {
 		return list.indexOf(ping) > -1
 	}
 
+	TBA.prototype.getChat = function (text, name) {
+		// find a chat message containing text
+		// optionally also containing name
+		let query = `.message:contains("${ text }")`
+		if (name) query += `:contains("${ name }")`
+		return $( query ).last()
+	}
+
 }
 
 const POST_HTML = (text, subject, type) => `

@@ -5,6 +5,7 @@ Function | Notes
 `Chat(text)` | send a real message to turntable
 `Batch(array)` | send multiple (max 3) messages to turntable<br />`array` - an array of strings to send
 `getName(id)` | return a user's name from their ID
+`getChat(text, name)` | finds the DOM element for message
 `hasPing(string)` | checks a string for ping of the user
 `Jump()` | provides access to `.becomeDj()`
 `Drop()` | provides access to `.quitDj()`
