@@ -20,6 +20,7 @@ module.exports = TBA => {
 	TBA.prototype._logger = function (type, text, data) {
 		this.logs = this.logs || []
 		this.logs.push({ text, data, type })
+		this.Emit("log", { text, data, type })
 		if (type == "debug" && !this.debugging) return
 
 		let body = `%c${ this.name } :: ${ text }`
