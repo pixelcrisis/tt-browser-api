@@ -18,9 +18,10 @@ module.exports = TBA => {
 	// all logpoints save to logger
 	// and optionally print to console
 	TBA.prototype._logger = function (type, text, data) {
+		let time = new Date().toLocaleTimeString("en-us")
 		this.logs = this.logs || []
-		this.logs.push({ text, data, type })
-		this.Emit("log", { text, data, type })
+		this.logs.push({ text, data, type, time })
+		this.Emit("log", { text, data, type, time })
 		if (type == "debug" && !this.debugging) return
 
 		let body = `%c${ this.name } :: ${ text }`
