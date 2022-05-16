@@ -19,16 +19,16 @@ module.exports = TBA => {
 		// un bind and remove
 		this.Debug(`Detaching...`)
 		clearInterval(this.loop)
-		this.__watch.disconnect()
-		this.$core.removeEventListener("message", this.__event)
+		this.watcher.disconnect()
+		this.$core.removeEventListener("message", this.listener)
 		this.Print(`Detached`)
 	}
 
 	TBA.prototype._attached = function () {
 		this.cacheInit() // build cache
 		// bind our listener to turntable
-		this.$bind = this.Listen.bind(this)
-		this.$core.addEventListener("message", this.$bind)
+		this.listener = this.Listen.bind(this)
+		this.$core.addEventListener("message", this.listener)
 		this.bindMutations() // our DOM watcher
 		this.bindLooped() // our internal ticker
 		// return the room name and listeners

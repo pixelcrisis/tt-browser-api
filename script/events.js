@@ -3,13 +3,19 @@
 
 module.exports = TBA => {
 
-	TBA.prototype.On = function (name, func) {
-		// the main binding function
-		// ensure we have an event list
+	TBA.prototype.On = function (names, funcs) {
+		// ensure we have an event bus
 		if (!this.events) this.events = {}
-		if (!this.events[name]) this.events[name] = []
-		// bind the function, add it to the list
-		this.events[name].push( func.bind(this) )
+		// force arrays on non-arrays
+		if (!Array.isArray(names)) names = [ names ]
+		if (!Array.isArray(funcs)) funcs = [ funcs ]
+		// the main binding function
+		names.forEach(name => {
+			if (!this.events[name]) this.events[name] = []
+			funcs.forEach(func => {
+				this.events[name].push( func.bind(this) )
+			})
+		})
 	}
 
 	TBA.prototype.Emit = function (name, ...args) {
