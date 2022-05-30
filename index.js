@@ -1,14 +1,14 @@
+const API = require("./package.json")
+// tt-browser-api (TBA) | a thing by pixelcrisis
+// for handling turntable.fm in the web browser
 class TBA {
-	// tt-browser-api (TBA) 
-	// a thing by pixelcrisis
-	// for handling turntable.fm
-	constructor(options = {}) { 
-		const pkg = require("./package.json")
-		this.name = options.name || "TBA"
-		this.version = options.version || pkg.version
-		this.api_version = pkg.version
-		this.debugging = options.debugging || false
-		this.Debug("Initialized")
+	constructor(options = {}) {
+		Object.assign(this, options)
+		// apply some default properties
+		this.api_version = API.version
+		if (!this.name) this.name = API.name
+		if (!this.label) this.label = "TBA"
+		this.$debug("Initialized")
 	}
 }
 

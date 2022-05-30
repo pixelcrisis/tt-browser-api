@@ -3,7 +3,7 @@
 
 module.exports = TBA => {
 
-	TBA.prototype.Mutate = function (mutations) {
+	TBA.prototype.__mutate = function (mutations) {
 		for (let changed of mutations) {
 			// parse the changed element
 			let element = changed.target
@@ -11,27 +11,27 @@ module.exports = TBA => {
 			let elTitle = element.nodeName == "TITLE"
 			let profile = element.baseURI.indexOf("profile/") > 0
 
-			if (elClass == "songs") return this._onList()
-			if (elClass == "messages") return this._onText(element)
-			if (elClass == "typeahead") return this._onType()
+			if (elClass == "songs") return this.__onList()
+			if (elClass == "messages") return this.__onText(element)
+			if (elClass == "typeahead") return this.__onType()
 
 			if (elTitle && profile) {
 				let userid = element.baseURI.split("profile/")[1]
-				return this._onUser(userid)
+				return this.__onUser(userid)
 			}
 		}
 	}
 
-	TBA.prototype.bindMutations = function () {
+	TBA.prototype.$on("attach", function () {
 		let Observe = window.MutationObserver
-		if (!Observe) Observe = WebKitMutationObserver
-		this.watcher = new Observe(this.Mutate.bind(this))
-		this.watcher.observe(document, { subtree: true, childList: true })
-	}
+		if (!Observe) Observe = window.WebKitMutationObserver
+		this.__watcher = new Observe(this.__mutate.bind(this))
+		this.__watcher.observe(document, { subtree: true, childList: true })
+	})
 
-	TBA.prototype._onList = require("./mutate/onList.js")
-	TBA.prototype._onText = require("./mutate/onText.js")
-	TBA.prototype._onType = require("./mutate/onType.js")
-	TBA.prototype._onUser = require("./mutate/onUser.js")
+	TBA.prototype.__onList = require("./mutate/onList.js")
+	TBA.prototype.__onText = require("./mutate/onText.js")
+	TBA.prototype.__onType = require("./mutate/onType.js")
+	TBA.prototype.__onUser = require("./mutate/onUser.js")
 
 }

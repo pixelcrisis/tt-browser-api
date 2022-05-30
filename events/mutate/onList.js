@@ -11,8 +11,8 @@ module.exports = function () {
 		let list = window.playlist.fileids
 		let name = window.playlist.activePlaylist
 		let data = { name, list }
-		this.Debug(`[list]: ${ name }`, data)
-		this.Emit("list", data)
+		this.$debug(`[list]: ${ name }`, data)
+		this.$emit("list", data)
 	}
 
 	// wait for half a second for updating to finish

@@ -3,33 +3,39 @@
 
 module.exports = TBA => {
 
-	TBA.prototype.Listen = function (event) {
+	TBA.prototype.__listen = function (event) {
 		let type = event.command
 		if (!event.command) return // only commands
 		// custom handlers for most common events
-		if (type == "speak") 		return this._onChat(event)
-		if (type == "pmmed") 		return this._onMail(event)
-		if (type == "add_dj") 	return this._onJump(event)
-		if (type == "rem_dj") 	return this._onDrop(event)
-		if (type == "nosong") 	return this._onSong(event)
-		if (type == "newsong") 	return this._onSong(event)
-		if (type == "snagged") 	return this._onSnag(event)
-		if (type == "update_votes") return this._onVote(event)
-		if (type == "deregistered") return this._onLeft(event)
-		if (type == "registered") 	return this._onJoin(event)
+		if (type == "speak") 		return this.__onChat(event)
+		if (type == "pmmed") 		return this.__onMail(event)
+		if (type == "add_dj") 	return this.__onJump(event)
+		if (type == "rem_dj") 	return this.__onDrop(event)
+		if (type == "nosong") 	return this.__onSong(event)
+		if (type == "newsong") 	return this.__onSong(event)
+		if (type == "snagged") 	return this.__onSnag(event)
+		if (type == "update_votes") return this.__onVote(event)
+		if (type == "deregistered") return this.__onLeft(event)
+		if (type == "registered") 	return this.__onJoin(event)
 		// otherwise, just emit the raw turntable data
-		this.Debug(`Unhandled: ${ type }`, event)
-		return this.Emit(name, { raw: event })
+		this.$debug(`Unhandled: ${ type }`, event)
+		return this.$emit(name, { raw: event })
 	}
 
-	TBA.prototype._onChat = require("./listen/onChat.js")
-	TBA.prototype._onMail = require("./listen/onMail.js")
-	TBA.prototype._onJump = require("./listen/onJump.js")
-	TBA.prototype._onDrop = require("./listen/onDrop.js")
-	TBA.prototype._onSong = require("./listen/onSong.js")
-	TBA.prototype._onSnag = require("./listen/onSnag.js")
-	TBA.prototype._onVote = require("./listen/onVote.js")
-	TBA.prototype._onJoin = require("./listen/onJoin.js")
-	TBA.prototype._onLeft = require("./listen/onLeft.js")
+	TBA.prototype.$on("attach", function () {
+		// bind our listener
+		this.__listener = this.__listen.bind(this)
+		window.turntable.addEventListener("message", this.__listener)
+	})
+
+	TBA.prototype.__onChat = require("./listen/onChat.js")
+	TBA.prototype.__onMail = require("./listen/onMail.js")
+	TBA.prototype.__onJump = require("./listen/onJump.js")
+	TBA.prototype.__onDrop = require("./listen/onDrop.js")
+	TBA.prototype.__onSong = require("./listen/onSong.js")
+	TBA.prototype.__onSnag = require("./listen/onSnag.js")
+	TBA.prototype.__onVote = require("./listen/onVote.js")
+	TBA.prototype.__onJoin = require("./listen/onJoin.js")
+	TBA.prototype.__onLeft = require("./listen/onLeft.js")
 
 }

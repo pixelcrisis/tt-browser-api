@@ -3,23 +3,21 @@
 
 module.exports = TBA => {
 
-	TBA.prototype.On = function (names, funcs) {
-		// ensure we have an event bus
-		if (!this.events) this.events = {}
+	TBA.prototype.$on = function (names, funcs) {
 		// force arrays on non-arrays
 		if (!Array.isArray(names)) names = [ names ]
 		if (!Array.isArray(funcs)) funcs = [ funcs ]
 		// the main binding function
 		names.forEach(name => {
-			if (!this.events[name]) this.events[name] = []
+			if (!this.__events[name]) this.__events[name] = []
 			funcs.forEach(func => {
-				this.events[name].push( func.bind(this) )
+				this.__events[name].push( func.bind(this) )
 			})
 		})
 	}
 
-	TBA.prototype.Emit = function (name, ...args) {
-		let list = this.events ? this.events[name] : false
+	TBA.prototype.$emit = function (name, ...args) {
+		let list = this.__events[name] || false
 		// fire functions bound to the event list
 		if (list) for (let func of list) {
 			// attempt to handle errors with try / catch
@@ -28,10 +26,16 @@ module.exports = TBA => {
 				// print out where we failed
 				let head = `Event (${ name })`
 				let text = `Function (${ func.toString() })`
-				this.Error(`${ head } - ${ text }`, e)
+				this.$error(`${ head } - ${ text }`, e)
 			}
 		}
 	}
+
+	TBA.prototype.__events = {}
+	// define our own psuedo store
+	TBA.prototype.$now_playing = {}
+	TBA.prototype.$last_played = {}
+	TBA.prototype.$current_djs = {}
 
 	// import listener/mutate events
 	require("../events/listen.js")(TBA)

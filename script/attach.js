@@ -3,69 +3,64 @@
 
 module.exports = TBA => {
 
-	TBA.prototype.Attach = function () {
+	TBA.prototype.$attach = function () {
 		// make sure that tt exists
-		if (!this._loadCore()) return false
+		if (!this.__loadCore()) return false
 		// find the room if tt exists
-		if (!this._loadRoom()) return this._reattach()
-		// we've attached to the room!
+		if (!this.__loadRoom()) return this.__reattach()
+		// we've found the room! let's cache it
+		this.__cacheInit(this.$room.metadata)
 		// bind access to turntable
-		let [ named, count ] = this._attached()
-		this.Print(`Attached to ${ named } (${ count } Users)`)
-		this.Emit("attach", { room: this.$room })
+		let [ named, count ] = this.__attached()
+		this.$print(`Attached to ${ named } (${ count } Users)`)
+		this.$emit("attach", { room: this.$room })
 	}
 
-	TBA.prototype.Detach = function () {
+	TBA.prototype.$detach = function () {
 		// un bind and remove
-		this.Debug(`Detaching...`)
+		this.$debug(`Detaching...`)
 		clearInterval(this.loop)
-		this.watcher.disconnect()
-		this.$core.removeEventListener("message", this.listener)
-		this.Print(`Detached`)
+		this.__watcher.disconnect()
+		this.$core.removeEventListener("message", this.__listener)
+		this.$print(`Detached`)
 	}
 
-	TBA.prototype._attached = function () {
-		this.cacheInit() // build cache
-		// bind our listener to turntable
-		this.listener = this.Listen.bind(this)
-		this.$core.addEventListener("message", this.listener)
-		this.bindMutations() // our DOM watcher
-		this.bindLooped() // our internal ticker
+	TBA.prototype.__attached = function () {
 		// return the room name and listeners
 		let named = this.$room.name
 		let count = this.$view.numListeners()
 		return [ named, count ]
 	}
 
-	TBA.prototype._reattach = function () {
+	TBA.prototype.__reattach = function () {
 		// try again until it works!
-		let again = this.Attach.bind(this)
+		let again = this.$attach.bind(this)
 		return setTimeout(again, 200)
 	}
 
-	TBA.prototype._initLoad = function () {
+	TBA.prototype.__initLoad = function () {
 		// we've officially started
 		// who knows how long it'll take?
-		this.Debug("Finding Turntable...")
+		this.$print("Finding Turntable...")
 		this.loading = true
-		this.Emit("load")
+		this.$emit("load")
 	}
 
-	TBA.prototype._loadCore = function () {
-		if (!this.loading) this._initLoad()
+	TBA.prototype.__loadCore = function () {
+		if (!this.loading) this.__initLoad()
 		// we can only do like....3 things in the lobby
-		if ($( LOBBY ).length) return this._loadLobby()
+		if ($( LOBBY ).length) return this.__loadLobby()
 		// don't check if we already have
 		if (this.$core) return this.$core
 		// if turntable doesn't exist, what do?
-		if (!window.turntable) return this._loadFail()
+		if (!window.turntable) return this.__loadFail()
 		// but hey, now we can find our room
-		this.Debug("Looking For Room...")
+		this.$debug("Looking For Room...")
 		this.$core = window.turntable
 		return this.$core
 	}
 
-	TBA.prototype._loadRoom = function () {
+	TBA.prototype.__loadRoom = function () {
 		// just make sure everything we need
 		// has been loaded into the DOM first
 		this.$user = window.turntable.user
@@ -74,21 +69,21 @@ module.exports = TBA => {
 		if (!this.$view || !this.$view.roomId) return false
 		const room = window.turntable.topViewController.roomView
 		if (!room || !room.roomData) return false
-		else this.Debug("Found Room", room.roomData)
+		else this.$debug("Found Room", room.roomData)
 		this.$room = window.turntable.topViewController.roomData
 		return this.$room
 	}
 
-	TBA.prototype._loadFail = function () {
-		this.Error("Turntable Not Found")
+	TBA.prototype.__loadFail = function () {
+		this.$error("Turntable Not Found")
 		this.loading = false
 		return false
 	}
 
-	TBA.prototype._loadLobby = function () {
-		this.Print("Attached To Lobby")
+	TBA.prototype.__loadLobby = function () {
+		this.$print("Attached To Lobby")
 		this.loading = false
-		this.Emit("lobby")
+		this.$emit("lobby")
 		return false
 	}
 

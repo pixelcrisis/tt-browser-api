@@ -3,27 +3,26 @@
 
 module.exports = TBA => {
 
-	TBA.prototype.Notify = function (head, text, icon, type) {
+	TBA.prototype.$notify = function ({ head, text, type, icon }) {
 		// send a desktop notification from turntable
 		if (!head || !text) return // sending what?
-		if (!this.canNotify() || document.hasFocus()) return
+		if (!this.__canNotify() || document.hasFocus()) return
 		// wrap in a function for use with delay
 		let send = () => {
-			let icon = icon || ""
+			let icon = icon || this.icon || ""
 			let sent = new Notification(head, { body: text, icon })
 			sent.onclick = () => { window.focus(); sent.close(); }
 		}
 		if (!type) send()
-		else this._delayNotify(send, type)
+		else this.__delayNotify(send, type)
 	}
 
-	TBA.prototype.Bully = function (head, text, icon, type) {
-		// send a Post and a Notification
-		this.Post(head, text, type)
-		this.Notify(head, text, icon, type)
+	TBA.prototype.$bully = function (alert) {
+		this.$post(alert) // send both a post
+		this.$notify(alert) // and a notification
 	}
 
-	TBA.prototype._canNotify = function () {
+	TBA.prototype.__canNotify = function () {
 		// check for notification permissions
 		if (!"Notification" in window) return false
 		if (Notification.permission == "denied") return false
@@ -36,7 +35,7 @@ module.exports = TBA => {
 		return true
 	}
 
-	TBA.prototype._delayNotify = function (notify, type) {
+	TBA.prototype.__delayNotify = function (notify, type) {
 		if (!this._holding) this._holding = {}
 		if (this._holding[type]) return false
 		// set a self-destructing delay

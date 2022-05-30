@@ -2,5 +2,5 @@
 // detecting the tt typeahead
 
 module.exports = function () {
-	this.Emit("type")
+	this.$emit("type")
 }

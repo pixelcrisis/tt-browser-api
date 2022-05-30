@@ -3,27 +3,27 @@
 
 module.exports = TBA => {
 
-	TBA.prototype.Body = function (name, on) {
+	TBA.prototype.$body = function (name, on) {
 		// toggle classes on the DOM body
 		let has = $("body").hasClass(name)
 		if (on && !has) $("body").addClass(name)
 		if (!on && has) $("body").removeClass(name)
 	}
 
-	TBA.prototype.Sheet = function (path = "#", type) {
+	TBA.prototype.$sheet = function (path = "#", type) {
 		// insert a stylesheet
 		// if we have a type, only include one
 		let curr = type ? $(`#${ type }`) : false
-		if (path != "#") this.Debug(`inserting stylesheet`, { path, type })
+		if (path != "#") this.$debug(`inserting stylesheet`, { path, type })
 		if (curr && curr.length) curr.attr("href", path)
 		else document.head.append( SHEET_HTML(path, type) )
 	}
 
-	TBA.prototype.Style = function (style = "", type) {
+	TBA.prototype.$style = function (style = "", type) {
 		// inject CSS into style tags 
 		// if we have a type, only include one set
 		let curr = type ? $(`#${ type }`)[0] : false
-		if (style) this.Debug(`injecting css`, { style, type })
+		if (style) this.$debug(`injecting css`, { style, type })
 		if (curr) curr.innerHTML = style
 		else document.head.append( STYLE_HTML(style, type) )
 	}

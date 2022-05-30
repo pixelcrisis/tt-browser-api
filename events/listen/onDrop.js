@@ -3,9 +3,14 @@
 
 module.exports = function (event) {
 	for (let user of event.user) {
-		let stat = this.cacheDrop(user.userid)
-		let data = { user, stat, raw: event }
-		this.Debug(`[drop] ${ user.name }`, data)
-		this.Emit("drop", data)
+		let data = {
+			self: user.userid == this.$user.id,
+			stat: this.__cacheDrop(user.userid),
+			user: { id: user.userid, name: user.name },
+			raw: event
+		}
+
+		this.$debug(`[drop] ${ user.name }`, data)
+		this.$emit("drop", data)
 	}
 }

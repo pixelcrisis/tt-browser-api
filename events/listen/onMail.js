@@ -2,10 +2,13 @@
 // handling tt PM events
 
 module.exports = function (event) {
-	let text = event.text
-	let name = this.getName(event.senderid)
-	let user = { userid: event.senderid, name }
-	let data = { user, text, raw: event }
-	this.Debug(`[mail] ${ name }`, data)
-	this.Emit("mail", data)
+	let user = event.senderid
+	let data = {
+		text: event.text,
+		user: { id: user, name: this.$getName(user) },
+		raw: event
+	}
+
+	this.$debug(`[mail] ${ name }`, data)
+	this.$emit("mail", data)
 }

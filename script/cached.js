@@ -3,69 +3,57 @@
 
 module.exports = TBA => {
 
-	TBA.prototype.cacheInit = function () {
-		// define our storage
-		this.now_playing = {}
-		this.last_played = {}
-		this.current_djs = {}
-		// cache the current data
-		let list = this.$room.metadata.djs
-		let song = this.$room.metadata.current_song
-		for (let id of list) this.cacheJump(id)
-		this.cacheSong(song)
-		// finished initial cache
-		let name = song && song.metadata ? song.metadata.song : "None"
-		this.Debug(`Cached Song: ${ name }`)
-		this.Debug(`Cached DJs: ${ list.length }`)
+	TBA.prototype.__cacheInit = function (room) {
+		for (let id of room.djs) this.__cacheJump(id)
+		this.__cacheSong(room)
 	}
 
-	TBA.prototype.cacheJump = function (id) {
-		// add stats to a new DJ
-		let stat = this.current_djs[id]
+	TBA.prototype.__cacheJump = function (id) {
+		let stat = this.$current_djs[id]
 		let base = { spun: 0, love: 0, hate: 0, snag: 0 }
-		this.current_djs[id] = stat || base
+		this.$current_djs[id] = stat || base
+		return this.$current_djs[id]
 	}
 
-	TBA.prototype.cacheDrop = function (id) {
-		// remove from cache, return stats
-		if (!this.current_djs[id]) return false
-		let stat = { ...this.current_djs[id] }
-		delete this.current_djs[id]
+	TBA.prototype.__cacheDrop = function (id) {
+		let curr = this.$current_djs[id]
+		let stat = curr  ? { ...stat } : false
+		if (curr) delete this.$current_djs[id]
 		return stat
 	}
 
-	TBA.prototype.cacheSpun = function () {
-		let last = this.last_played
-		if (!last.song || !last.djid) return
-		// add the stats from last to current DJ
-		let curr = this.current_djs[last.djid]
-		if (last.love) curr.love += last.love
-		if (last.hate) curr.hate += last.hate
-		if (last.snag) curr.snag += last.snag
-		this.current_djs[last.djid] = curr
-		this.current_djs[last.djid].spun += 1
+	TBA.prototype.__cacheSong = function (room) {
+		this.$last_played = { ...this.$now_playing }
+		let song = room.current_song
+		let last = this.$last_played
+
+		if (!song) this.$now_playing = { none: true }
+		else this.$now_playing = {
+			...song.metadata,
+			djid: song.djid, snag: 0,
+			love: room.upvotes,
+			hate: room.downvotes
+		}
+
+		if (last.song && last.djid) {
+			let dj = this.$current_djs[last.djid]
+			if (dj && last.love) dj.love += last.love
+			if (dj && last.hate) dj.hate += last.hate
+			if (dj && last.snag) dj.snag += last.snag
+		}
 	}
 
-	TBA.prototype.cacheSong = function (song) {
-		let djid = song ? song.djid : false
-		let love = this.$room.metadata.upvotes
-		let hate = this.$room.metadata.downvotes
-		let base = { djid, love, hate, snag: 0 }
-		// define our last played and current song (if any)
-		this.last_played = { ...this.now_playing }
-		this.now_playing = song ? { ...song.metadata, ...base } : {}
-		this.cacheSpun() // update the stats of the last DJ
+	TBA.prototype.__cacheVote = function (room) {
+		this.$now_playing.love = room.upvotes
+		this.$now_playing.hate = room.downvotes
 	}
 
-	TBA.prototype.cacheSnag = function () {
-		// increment the number of snags
-		this.now_playing.snag += 1 // all we can do lol
+	TBA.prototype.__cacheSnag = function () {
+		this.$now_playing.snag += 1
 	}
 
-	TBA.prototype.cacheVote = function () {
-		// update our cache with new values
-		this.now_playing.love = this.$room.metadata.upvotes
-		this.now_playing.hate = this.$room.metadata.downvotes
-	}
+	TBA.prototype.$current_djs = {}
+	TBA.prototype.$now_playing = {}
+	TBA.prototype.$last_played = {}
 
 }

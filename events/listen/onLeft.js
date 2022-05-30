@@ -3,7 +3,12 @@
 
 module.exports = function (event) {
 	for (let user of event.user) {
-		this.Debug(`[left] ${ user.name }`, user)
-		this.Emit("left", { user, raw: event })
+		let data = {
+			user: { id: user.userid, name: user.name },
+			raw: event
+		}
+
+		this.$debug(`[left] ${ user.name }`, data)
+		this.$emit("left", data)
 	}
 }

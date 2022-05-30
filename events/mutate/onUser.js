@@ -2,6 +2,8 @@
 // detecting a user profile
 
 module.exports = function (userid) {
-	let data = { userid }
-	this.Emit("user", data)
+	let data = {
+		user: { id: userid, name: this.$getName(userid) }
+	}
+	this.$emit("user", data)
 }

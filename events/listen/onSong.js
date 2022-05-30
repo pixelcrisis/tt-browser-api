@@ -2,10 +2,17 @@
 // handling songs (or not) starting
 
 module.exports = function (event) {
-	this.cacheSong(event.room.metadata.current_song)
-	let song = this.now_playing
-	let last = this.last_played
-	let data = { song, last, raw: event }
-	this.Debug(`[song] ${ song.song || "None" }`, data)
-	this.Emit("song", data)
+	this.__cacheSong(event.room.metadata)
+
+	let data = {
+		curr: this.$now_playing, 
+		last: this.$last_played,
+		self: this.$now_playing.djid == this.$user.id,
+		name: this.$now_playing.song || "Nothing",
+		artist: this.$now_playing.artist || "No One",
+		event: raw
+	}
+
+	this.$debug(`[song] ${ song.name }`, data)
+	this.$emit("song", data)
 }

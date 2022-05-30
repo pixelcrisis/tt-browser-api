@@ -2,10 +2,15 @@
 // handling someone snagging the song
 
 module.exports = function (event) {
-	this.cacheSnag()
-	let name = this.getName(event.userid)
-	let user = { userid: event.userid, name }
-	let data = { user, raw: event }
-	this.Debug(`[snag] ${ name }`, data)
-	this.Emit("snag", data)
+	this.__cacheSnag()
+	
+	let user = event.userid
+	let data = {
+		self: user == this.$user.id,
+		user: { id: user, name: this.$getName(user) },
+		raw: event
+	}
+
+	this.$debug(`[snag] ${ name }`, data)
+	this.$emit("snag", data)
 }

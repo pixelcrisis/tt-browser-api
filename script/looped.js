@@ -3,16 +3,17 @@
 
 module.exports = TBA => {
 
-	TBA.Looped = function () {
-		this.beat = this.beat ? this.beat + 1 : 1
-		let data = { beat: this.beat }
-		this.Emit("loop", data)
+	TBA.prototype.__looped = function () {
+		this.__beat += 1
+		this.$emit("loop", { beat: this.__beat })
 	}
 
-	TBA.bindLooped = function () {
-		let looped = this.Looped.bind(this)
-		let timing = 60 * 1000 // one minute
-		this.loop = setInterval(looped, timing)
-	}
+	TBA.prototype.$on("attach", function () {
+		let time = 60 * 1000 // one minute
+		let loop = this.__looped.bind(this)
+		this.__loop = setInterval(loop, time)
+	})
+
+	TBA.prototype.__beat = 0
 
 }
