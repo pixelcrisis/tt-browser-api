@@ -28,7 +28,7 @@ module.exports = TBA => {
 		if (Notification.permission == "denied") return false
 		if (Notification.permission == "default") {
 			// ask for permissions
-			this.Print(`Requesting Notification Permissions`)
+			this.$print(`Requesting Notification Permissions`)
 			Notification.requestPermission()
 			return false
 		}

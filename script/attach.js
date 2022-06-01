@@ -9,11 +9,11 @@ module.exports = TBA => {
 		// find the room if tt exists
 		if (!this.__loadRoom()) return this.__reattach()
 		// we've found the room! let's cache it
-		this.__cacheInit(this.$room.metadata)
+		this.__cacheInit(this.$room().metadata)
 		// bind access to turntable
 		let [ named, count ] = this.__attached()
 		this.$print(`Attached to ${ named } (${ count } Users)`)
-		this.$emit("attach", { room: this.$room })
+		this.$emit("attach", { room: this.$room() })
 	}
 
 	TBA.prototype.$detach = function () {
@@ -27,8 +27,8 @@ module.exports = TBA => {
 
 	TBA.prototype.__attached = function () {
 		// return the room name and listeners
-		let named = this.$room.name
-		let count = this.$view.numListeners()
+		let named = this.$room().name
+		let count = this.$view().numListeners()
 		return [ named, count ]
 	}
 
@@ -63,15 +63,12 @@ module.exports = TBA => {
 	TBA.prototype.__loadRoom = function () {
 		// just make sure everything we need
 		// has been loaded into the DOM first
-		this.$user = window.turntable.user
-		if (!this.$user) return false
-		this.$view = window.turntable.topViewController
-		if (!this.$view || !this.$view.roomId) return false
+		if (!this.$user()) return false
+		if (!this.$view() || !this.$view().roomId) return false
 		const room = window.turntable.topViewController.roomView
 		if (!room || !room.roomData) return false
 		else this.$debug("Found Room", room.roomData)
-		this.$room = window.turntable.topViewController.roomData
-		return this.$room
+		return this.$room()
 	}
 
 	TBA.prototype.__loadFail = function () {

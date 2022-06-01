@@ -2,6 +2,6 @@
 // handling non-user messages
 
 module.exports = function (target) {
-	let data = { target, user: target.has(".avatar").length }
+	let data = { target: $(target) }
 	this.$emit("text", data)
 }

@@ -14,7 +14,7 @@ module.exports = TBA => {
 		// insert a stylesheet
 		// if we have a type, only include one
 		let curr = type ? $(`#${ type }`) : false
-		if (path != "#") this.$debug(`inserting stylesheet`, { path, type })
+		if (path != "#") this.$debug(`Inserting Stylesheet`, { path, type })
 		if (curr && curr.length) curr.attr("href", path)
 		else document.head.append( SHEET_HTML(path, type) )
 	}
@@ -23,7 +23,7 @@ module.exports = TBA => {
 		// inject CSS into style tags 
 		// if we have a type, only include one set
 		let curr = type ? $(`#${ type }`)[0] : false
-		if (style) this.$debug(`injecting css`, { style, type })
+		if (style) this.$debug(`Injecting CSS`, { style, type })
 		if (curr) curr.innerHTML = style
 		else document.head.append( STYLE_HTML(style, type) )
 	}

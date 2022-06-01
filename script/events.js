@@ -22,12 +22,7 @@ module.exports = TBA => {
 		if (list) for (let func of list) {
 			// attempt to handle errors with try / catch
 			try { func(...args) }
-			catch (e) { 
-				// print out where we failed
-				let head = `Event (${ name })`
-				let text = `Function (${ func.toString() })`
-				this.$error(`${ head } - ${ text }`, e)
-			}
+			catch (e) { this.$error(`Event (${ name })`, e) }
 		}
 	}
 

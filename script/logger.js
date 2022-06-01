@@ -22,7 +22,7 @@ module.exports = TBA => {
 		this.logs = this.logs || []
 		this.logs.push({ text, data, type, time })
 		this.$emit("log", { text, data, type, time })
-		if (type == "debug" && !this.debugging) return
+		// if (type == "debug" && !this.debugging) return
 
 		let body = `%c${ this.label } :: ${ text }`
 		let info = [ body, CSS[type] ]

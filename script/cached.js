@@ -17,8 +17,8 @@ module.exports = TBA => {
 
 	TBA.prototype.__cacheDrop = function (id) {
 		let curr = this.$current_djs[id]
-		let stat = curr  ? { ...stat } : false
-		if (curr) delete this.$current_djs[id]
+		let stat = curr ? { ...curr } : false
+		if (stat) delete this.$current_djs[id]
 		return stat
 	}
 

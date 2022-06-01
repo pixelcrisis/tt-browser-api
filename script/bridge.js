@@ -3,6 +3,9 @@
 
 module.exports = TBA => {
 
+	TBA.prototype.$user = () => window.turntable.user
+	TBA.prototype.$view = () => window.turntable.topViewController
+	TBA.prototype.$room = () => window.turntable.topViewController.roomData
 	TBA.prototype.$jump = () => window.turntable.topViewController.becomeDj()
 	TBA.prototype.$drop = () => window.turntable.topViewController.quitDj()
 
@@ -16,8 +19,8 @@ module.exports = TBA => {
 		// send a real message to turntable
 		if (text) window.turntable.sendMessage({
 			text, api: "room.speak",
-			roomid: this.$view.roomId,
-			section: this.$view.section
+			roomid: this.$view().roomId,
+			section: this.$view().section
 		})
 	}
 
@@ -26,7 +29,7 @@ module.exports = TBA => {
 		if (!text) return false
 		let html = POST_HTML(text, head, type)
 		$(".chat .messages").append( html )
-		this.$view.updateChatScroll()
+		this.$view().updateChatScroll()
 	}
 
 	TBA.prototype.$batch = function (arr) {
@@ -39,7 +42,7 @@ module.exports = TBA => {
 	TBA.prototype.$getName = function (id) {
 		id = id || "Unknown"
 		// check the room locally first
-		let User = this.$view.userMap[id]
+		let User = this.$view().userMap[id]
 		if (User) return User.attributes.name
 		// maybe they're hiding in the DMs
 		let Chat = this.$core.buddyList.pmWindows
@@ -53,7 +56,7 @@ module.exports = TBA => {
 	TBA.prototype.$hasPing = function (str) {
 		// just checks a string for an us ping
 		let list = str.split(" ") // per word
-		let ping = `@${ this.$user.attributes.name }`
+		let ping = `@${ this.$user().attributes.name }`
 		return list.indexOf(ping) > -1
 	}
 
@@ -76,7 +79,7 @@ const CLICK = vote => {
 }
 
 const POST_HTML = (text, subject, type) => `
-	<div class="${ type || "" }">
+	<div class="message ${ type || "" }">
 		<span class="subject">${ subject || "" }</span>
 		<span class="text">${ text || "" }</span>
 	</div>
