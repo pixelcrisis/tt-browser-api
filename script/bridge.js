@@ -26,7 +26,10 @@ module.exports = {
 	$batch (list) { // multiple real messages
 		if (!list || !list.length) return false
 		if (list.length > 3) this.$post(BATCH_ERROR)
-		else for (let msg of list) this.$chat( msg.trim() )
+		else list.forEach((msg, i) => {
+			// delay to make sure they go in order
+			setTimeout(this.$chat( msg.trim() ), i * 100)
+		})
 	},
 
 	$post ({ type, head, text }) { // fake chat message
