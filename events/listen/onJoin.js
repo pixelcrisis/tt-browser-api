@@ -8,7 +8,7 @@ module.exports = function (event) {
 			raw: event
 		}
 
-		this.$debut(`[join] ${ user.name }`, data)
+		this.$debug(`[join] ${ user.name }`, data)
 		this.$emit("join", data)
 	}
 }
