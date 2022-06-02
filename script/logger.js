@@ -24,7 +24,7 @@ module.exports = {
 		if (type == "debug" && !this.debugging) return
 		let body = `%c${ this.label } :: ${ text }`
 		let send = [ body, CSS[ type ] ]
-		if (data) send.push(data)
+		if (data) send.push({ data })
 		console.info( ...send )
 	}
 
