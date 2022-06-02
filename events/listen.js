@@ -1,9 +1,20 @@
 // listen.js
 // intercepting tt events
 
-module.exports = TBA => {
+module.exports = {
 
-	TBA.prototype.__listen = function (event) {
+	// import our listeners
+	__onChat: require("./listen/onChat.js"),
+	__onMail: require("./listen/onMail.js"),
+	__onJump: require("./listen/onJump.js"),
+	__onDrop: require("./listen/onDrop.js"),
+	__onSong: require("./listen/onSong.js"),
+	__onSnag: require("./listen/onSnag.js"),
+	__onVote: require("./listen/onVote.js"),
+	__onJoin: require("./listen/onJoin.js"),
+	__onLeft: require("./listen/onLeft.js"),
+
+	__listen (event) {
 		let type = event.command
 		if (!event.command) return // only commands
 		// custom handlers for most common events
@@ -20,22 +31,11 @@ module.exports = TBA => {
 		// otherwise, just emit the raw turntable data
 		this.$debug(`Unhandled: ${ type }`, event)
 		return this.$emit(name, { raw: event })
-	}
+	},
 
-	TBA.prototype.$on("attach", function () {
-		// bind our listener
+	__bindListener () {
 		this.__listener = this.__listen.bind(this)
 		window.turntable.addEventListener("message", this.__listener)
-	})
-
-	TBA.prototype.__onChat = require("./listen/onChat.js")
-	TBA.prototype.__onMail = require("./listen/onMail.js")
-	TBA.prototype.__onJump = require("./listen/onJump.js")
-	TBA.prototype.__onDrop = require("./listen/onDrop.js")
-	TBA.prototype.__onSong = require("./listen/onSong.js")
-	TBA.prototype.__onSnag = require("./listen/onSnag.js")
-	TBA.prototype.__onVote = require("./listen/onVote.js")
-	TBA.prototype.__onJoin = require("./listen/onJoin.js")
-	TBA.prototype.__onLeft = require("./listen/onLeft.js")
+	}
 
 }

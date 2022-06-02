@@ -1,9 +1,9 @@
 // notify.js
 // desktop notifications!
 
-module.exports = TBA => {
+module.exports = {
 
-	TBA.prototype.$notify = function ({ head, text, type, icon }) {
+	$notify ({ head, text, type, icon }) {
 		// send a desktop notification from turntable
 		if (!head || !text) return // sending what?
 		if (!this.__canNotify() || document.hasFocus()) return
@@ -15,14 +15,14 @@ module.exports = TBA => {
 		}
 		if (!type) send()
 		else this.__delayNotify(send, type)
-	}
+	},
 
-	TBA.prototype.$bully = function (alert) {
+	$bully (alert) {
 		this.$post(alert) // send both a post
 		this.$notify(alert) // and a notification
-	}
+	},
 
-	TBA.prototype.__canNotify = function () {
+	__canNotify () {
 		// check for notification permissions
 		if (!"Notification" in window) return false
 		if (Notification.permission == "denied") return false
@@ -33,9 +33,9 @@ module.exports = TBA => {
 			return false
 		}
 		return true
-	}
+	},
 
-	TBA.prototype.__delayNotify = function (notify, type) {
+	__delayNotify (notify, type) {
 		if (!this._holding) this._holding = {}
 		if (this._holding[type]) return false
 		// set a self-destructing delay

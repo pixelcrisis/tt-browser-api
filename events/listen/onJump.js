@@ -2,7 +2,6 @@
 // handling a new room DJ
 
 module.exports = function (event) {
-	
 	for (let user of event.user) {
 		let data = { 
 			self: user.userid == this.$user().id,
@@ -13,6 +12,5 @@ module.exports = function (event) {
 
 		this.$debug(`[jump] ${ user.name }`, data)
 		this.$emit("jump", data)
-	}
-	
+	}	
 }

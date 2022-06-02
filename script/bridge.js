@@ -1,45 +1,42 @@
 // bridge.js
 // communicating with turntable
 
-module.exports = TBA => {
+module.exports = {
 
-	TBA.prototype.$user = () => window.turntable.user
-	TBA.prototype.$view = () => window.turntable.topViewController
-	TBA.prototype.$room = () => window.turntable.topViewController.roomData
-	TBA.prototype.$jump = () => window.turntable.topViewController.becomeDj()
-	TBA.prototype.$drop = () => window.turntable.topViewController.quitDj()
+	$user () { return window.turntable.user },
+	$view () { return window.turntable.topViewController },
+	$room () { return window.turntable.topViewController.roomData },
+	$jump () { return window.turntable.topViewController.becomeDj() },
+	$drop () { return window.turntable.topViewController.quitDj() },
 
-	TBA.prototype.$vote = vote => {
-		if (vote == "lame") vote = ".lame-button"
-		else vote = ".awesome-button"
-		return CLICK( vote )
-	}
+	$vote (vote) { 
+		let dn = vote == "down"
+		if (dn) return CLICK(".lame-button")
+		else return CLICK(".awesome-button")
+	},
 
-	TBA.prototype.$chat = function (text) {
-		// send a real message to turntable
+	$chat (text) { // send a real message
 		if (text) window.turntable.sendMessage({
-			text, api: "room.speak",
+			api: "room.speak", text,
 			roomid: this.$view().roomId,
 			section: this.$view().section
 		})
-	}
+	},
 
-	TBA.prototype.$post = function ({ head, text, type }) {
-		// post a fake message in the chat box for the user
+	$batch (list) { // multiple real messages
+		if (!list || !list.length) return false
+		if (list.length > 3) this.$post(BATCH_ERROR)
+		else for (let msg of list) this.$chat( msg.trim() )
+	},
+
+	$post ({ type, head, text }) { // fake chat message
 		if (!text) return false
-		let html = POST_HTML(text, head, type)
+		let html = POST_HTML(type, head, text )
 		$(".chat .messages").append( html )
 		this.$view().updateChatScroll()
-	}
-
-	TBA.prototype.$batch = function (arr) {
-		// send multiple messages to chat
-		if (!arr || !arr.length) return false
-		if (arr.length > 3) this.$post( ...BATCH_ERROR )
-		else for (let msg of arr) this.$chat( msg.trim() )
-	}
+	},
 	
-	TBA.prototype.$getName = function (id) {
+	$getName (id) {
 		id = id || "Unknown"
 		// check the room locally first
 		let User = this.$view().userMap[id]
@@ -51,18 +48,15 @@ module.exports = TBA => {
 		// we'll check the API for a name otherwise later
 		// when I feel like figuring out async (todo)
 		return id
-	}
+	},
 
-	TBA.prototype.$hasPing = function (str) {
-		// just checks a string for an us ping
+	$hasPing (str) { // checks for an us ping
 		let list = str.split(" ") // per word
 		let ping = `@${ this.$user().attributes.name }`
 		return list.indexOf(ping) > -1
-	}
+	},
 
-	TBA.prototype.$getChat = function (text, name) {
-		// find a chat message containing text
-		// optionally also containing name
+	$getChat (text, name) { // find chat in DOM
 		let query = `.message:contains("${ text }")`
 		if (name) query += `:contains("${ name }")`
 		return $( query ).last()
@@ -78,14 +72,14 @@ const CLICK = vote => {
   return !elem.dispatchEvent(fire)
 }
 
-const POST_HTML = (text, subject, type) => `
+const POST_HTML = (type, head, text) => `
 	<div class="message ${ type || "" }">
-		<span class="subject">${ subject || "" }</span>
+		<span class="subject">${ head || "" }</span>
 		<span class="text">${ text || "" }</span>
 	</div>
 `
 
-const BATCH_ERROR = [
-	"Too Many Messages!",
-	"Can only send up to 3 messages at a time!"
-]
+const BATCH_ERROR = {
+	head: "Too Many Messages!",
+	text: "Can only send up to 3 messages at a time!"
+}

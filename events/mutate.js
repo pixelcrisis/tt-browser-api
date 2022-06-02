@@ -1,9 +1,15 @@
 // mutate.js
 // intercepting dom changes
 
-module.exports = TBA => {
+module.exports = {
 
-	TBA.prototype.__mutate = function (mutations) {
+	// import our mutate watchers
+	__onList: require("./mutate/onList.js"),
+	__onText: require("./mutate/onText.js"),
+	__onType: require("./mutate/onType.js"),
+	__onUser: require("./mutate/onUser.js"),
+
+	__mutate (mutations) {
 		for (let changed of mutations) {
 			// parse the changed element
 			let element = changed.target
@@ -20,18 +26,13 @@ module.exports = TBA => {
 				return this.__onUser(userid)
 			}
 		}
-	}
+	},
 
-	TBA.prototype.$on("attach", function () {
+	__bindMutation () {
 		let Observe = window.MutationObserver
 		if (!Observe) Observe = window.WebKitMutationObserver
-		this.__watcher = new Observe(this.__mutate.bind(this))
-		this.__watcher.observe(document, { subtree: true, childList: true })
-	})
-
-	TBA.prototype.__onList = require("./mutate/onList.js")
-	TBA.prototype.__onText = require("./mutate/onText.js")
-	TBA.prototype.__onType = require("./mutate/onType.js")
-	TBA.prototype.__onUser = require("./mutate/onUser.js")
-
+		this.__mutation = new Observe(this.__mutate.bind(this))
+		this.__mutation.observe(document, { subtree: true, childList: true })
+	}
+	
 }

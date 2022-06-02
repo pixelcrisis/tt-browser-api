@@ -2,7 +2,6 @@
 // handling songs (or not) starting
 
 module.exports = function (event) {
-	
 	this.__cacheSong(event.room.metadata)
 
 	let data = {
@@ -16,5 +15,4 @@ module.exports = function (event) {
 
 	this.$debug(`[song] ${ data.name }`, data)
 	this.$emit("song", data)
-	
 }

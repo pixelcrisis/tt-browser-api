@@ -2,9 +2,9 @@
 // handling playlist updates
 
 module.exports = function () {
-	if (this.listDelay) {
-		clearTimeout(this.listDelay)
-		delete this.listDelay
+	if (this.__listDelay) {
+		clearTimeout(this.__listDelay)
+		delete this.__listDelay
 	}
 
 	let onList = function () {
@@ -16,5 +16,5 @@ module.exports = function () {
 	}
 
 	// wait for half a second for updating to finish
-	this.listDelay = setTimeout(onList.bind(this), 500)
+	this.__listDelay = setTimeout(onList.bind(this), 500)
 }

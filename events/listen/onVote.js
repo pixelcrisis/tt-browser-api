@@ -2,7 +2,6 @@
 // handling awesome (or lame) votes
 
 module.exports = function (event) {
-	
 	this.__cacheVote(event.room.metadata)
 	// get the last vote in the list
 	let room = event.room.metadata
@@ -16,5 +15,4 @@ module.exports = function (event) {
 
 	this.$debug(`[vote] ${ user.name } (${ vote })`, data)
 	this.$emit("vote", data)
-	
 }

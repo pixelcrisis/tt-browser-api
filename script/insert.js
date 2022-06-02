@@ -1,26 +1,23 @@
 // insert.js
 // modifying the turntable DOM
 
-module.exports = TBA => {
+module.exports = {
 
-	TBA.prototype.$body = function (name, on) {
-		// toggle classes on the DOM body
+	$body (name, on) { // DOM body classes
 		let has = $("body").hasClass(name)
 		if (on && !has) $("body").addClass(name)
 		if (!on && has) $("body").removeClass(name)
-	}
+	},
 
-	TBA.prototype.$sheet = function (path = "#", type) {
-		// insert a stylesheet
+	$sheet (path = "#", type) { // insert a stylesheet
 		// if we have a type, only include one
 		let curr = type ? $(`#${ type }`) : false
 		if (path != "#") this.$debug(`Inserting Stylesheet`, { path, type })
 		if (curr && curr.length) curr.attr("href", path)
 		else document.head.append( SHEET_HTML(path, type) )
-	}
+	},
 
-	TBA.prototype.$style = function (style = "", type) {
-		// inject CSS into style tags 
+	$style (style = "", type) { // inject style tags 
 		// if we have a type, only include one set
 		let curr = type ? $(`#${ type }`)[0] : false
 		if (style) this.$debug(`Injecting CSS`, { style, type })
