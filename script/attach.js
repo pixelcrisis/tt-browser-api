@@ -17,8 +17,9 @@ module.exports = {
 	$detach () {
 		// un bind and remove
 		this.$debug(`Detaching...`)
-		clearInterval(this.loop)
+		clearInterval(this.__loop)
 		this.__mutation.disconnect()
+		$(document).off("keyup", this.__escaping)
 		this.$core.removeEventListener("message", this.__listener)
 		this.$print(`Detached`)
 	},

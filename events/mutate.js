@@ -28,11 +28,19 @@ module.exports = {
 		}
 	},
 
+	__escape (event) {
+		if (event.key != "Escape") return
+		this.$emit("esc")
+	},
+
 	__bindMutation () {
 		let Observe = window.MutationObserver
 		if (!Observe) Observe = window.WebKitMutationObserver
 		this.__mutation = new Observe(this.__mutate.bind(this))
 		this.__mutation.observe(document, { subtree: true, childList: true })
+		// bind up our escape handler
+		this.__escaping = this.__escape.bind(this)
+		$(document).on("keyup", this.__escaping)
 	}
 	
 }

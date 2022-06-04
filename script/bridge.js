@@ -60,9 +60,13 @@ module.exports = {
 	},
 
 	$getChat (text, name) { // find chat in DOM
-		let query = `.message:contains("${ text }")`
-		if (name) query += `:contains("${ name }")`
-		return $( query ).last()
+		let search = q => `.message:contains("${ q }")`
+		let byText = $( search(text) )
+		if (byText.length) return byText
+		let byBoth = $(`${ search(text) }:contains("${ name }")`)
+		if (byBoth.length) return byBoth
+		let byName = $(`.message:contains("${ name }")`).last()
+		return byName
 	}
 
 }

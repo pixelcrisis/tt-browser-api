@@ -9,7 +9,7 @@ module.exports = {
 		if (!this.__canNotify() || document.hasFocus()) return
 		// wrap in a function for use with delay
 		let send = () => {
-			let icon = icon || this.icon || ""
+			icon = icon || this.icon || ""
 			let sent = new Notification(head, { body: text, icon })
 			sent.onclick = () => { window.focus(); sent.close(); }
 		}
