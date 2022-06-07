@@ -1,41 +1,40 @@
-// listen.js
-// intercepting tt events
+// import our listeners
+import onChat from "./listen/onChat.js"
+import onMail from "./listen/onMail.js"
+import onJump from "./listen/onJump.js"
+import onDrop from "./listen/onDrop.js"
+import onSong from "./listen/onSong.js"
+import onSnag from "./listen/onSnag.js"
+import onVote from "./listen/onVote.js"
+import onJoin from "./listen/onJoin.js"
+import onLeft from "./listen/onLeft.js"
 
-module.exports = {
+// listen for turntable events
+const listen = function (event) {
+	let type = event.command
+	if (!event.command) return
+	// common custom handlers
+	if (type == "speak") return onChat(event)
+	if (type == "pmmed") return onMail(event)
+	if (type == "add_dj") return onJump(event)
+	if (type == "rem_dj") return onDrop(event)
+	if (type == "nosong") return onSong(event)
+	if (type == "newsong") return onSong(event)
+	if (type == "snagged") return onSnag(event)
+	if (type == "registered") return onJoin(event)
+	if (type == "deregistered") return onLeft(event)
+	if (type == "update_votes") return onVote(event)
+	// otherwise emit raw turntable data
+	this.debug(`Unhandled: ${ type }`, event)
+	return this.emit(type, { raw: event })
+}
 
-	// import our listeners
-	__onChat: require("./listen/onChat.js"),
-	__onMail: require("./listen/onMail.js"),
-	__onJump: require("./listen/onJump.js"),
-	__onDrop: require("./listen/onDrop.js"),
-	__onSong: require("./listen/onSong.js"),
-	__onSnag: require("./listen/onSnag.js"),
-	__onVote: require("./listen/onVote.js"),
-	__onJoin: require("./listen/onJoin.js"),
-	__onLeft: require("./listen/onLeft.js"),
+// bind the listener to turntable
+export const BindListener = function () {
+	this.listener = listen.bind(this)
+	window.turntable.addEventListener("message", this.listener)
+}
 
-	__listen (event) {
-		let type = event.command
-		if (!event.command) return // only commands
-		// custom handlers for most common events
-		if (type == "speak") 		return this.__onChat(event)
-		if (type == "pmmed") 		return this.__onMail(event)
-		if (type == "add_dj") 	return this.__onJump(event)
-		if (type == "rem_dj") 	return this.__onDrop(event)
-		if (type == "nosong") 	return this.__onSong(event)
-		if (type == "newsong") 	return this.__onSong(event)
-		if (type == "snagged") 	return this.__onSnag(event)
-		if (type == "update_votes") return this.__onVote(event)
-		if (type == "deregistered") return this.__onLeft(event)
-		if (type == "registered") 	return this.__onJoin(event)
-		// otherwise, just emit the raw turntable data
-		this.$debug(`Unhandled: ${ type }`, event)
-		return this.$emit(name, { raw: event })
-	},
-
-	__bindListener () {
-		this.__listener = this.__listen.bind(this)
-		window.turntable.addEventListener("message", this.__listener)
-	}
-
+export const UnbindListener = function () {
+	window.turntable.removeEventListener("message", this.listener)
 }

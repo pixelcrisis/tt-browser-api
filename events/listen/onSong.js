@@ -1,18 +1,16 @@
-// listen/onSong.js
-// handling songs (or not) starting
-
-module.exports = function (event) {
-	this.__cacheSong(event.room.metadata)
+export default onSong = event => {
+	let room = event.room.metadata
+	let { curr, last } = this.RecordSong(room)
 
 	let data = {
-		curr: this.$now_playing, 
-		last: this.$last_played,
-		self: this.$now_playing.djid == this.$user().id,
-		name: this.$now_playing.song || "Nothing",
-		artist: this.$now_playing.artist || "No One",
+		none: curr.none,
+		name: curr.song || "Nothing",
+		artist: curr.artist || "No One",
+		self: curr.djid == this.user.id,
+		curr, last,
 		raw: event
 	}
 
-	this.$debug(`[song] ${ data.name }`, data)
-	this.$emit("song", data)
+	this.debug(`[song] ${ data.name }`, data)
+	this.emit("song", data)
 }

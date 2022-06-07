@@ -1,45 +1,36 @@
-// attach.js
-// initialize with turntable
+// attach to turntable
+export const attach = function () {
+	if (!this.__looking) this.Find()
+	if (!this.FindTT()) return false
+	if (!this.FindRoom()) return this.Reattach()
+	// we have finally found everything and attached
+	let [ named, count ] = this.Attached()
+	this.print(`Attached to ${ named } (${ count } Users)`)
+	this.emit("attach", { room: this.room })
+}
 
-module.exports = {
+// detach from turntable
+export const detach = function () {
+	this.debug("Detaching...")
+	this.UnbindLoop()
+	this.UnbindWatcher()
+	this.UnbindListener()
+	this.print("Detached")
+}
 
-	$attach () {
-		// make sure that tt exists
-		if (!this.__loadCore()) return false
-		// find the room if tt exists
-		if (!this.__loadRoom()) return this.__reattach()
-		// bind up our access to turntable
-		let [ named, count ] = this.__attached()
-		this.$print(`Attached to ${ named } (${ count } Users)`)
-		this.$emit("attach", { room: this.$room() })
-	},
+// when we attach, fire it all up
+export const Attached = function () {
+	this.BindLoop()
+	this.BindWatcher()
+	this.BindListener()
+	this.RecordRoom(this.room.metadata)
+	let named = this.room.name
+	let count = this.view.numListeners()
+	return [ named, count ]
+}
 
-	$detach () {
-		// un bind and remove
-		this.$debug(`Detaching...`)
-		clearInterval(this.__loop)
-		this.__mutation.disconnect()
-		$(document).off("keyup", this.__escaping)
-		this.$core.removeEventListener("message", this.__listener)
-		this.$print(`Detached`)
-	},
-
-	__attached () {
-		this.__bindLooped()
-		// bind our event handlers
-		this.__bindMutation()
-		this.__bindListener()
-		this.__cacheRoom(this.$room().metadata)
-		// return the room name and listeners
-		let named = this.$room().name
-		let count = this.$view().numListeners()
-		return [ named, count ]
-	},
-
-	__reattach () {
-		// try again until it works!
-		let again = this.$attach.bind(this)
-		return setTimeout(again, 200)
-	}
-
+// fire it later to see if it loaded yet
+export const Reattach = function () {
+	let again = this.attach.bind(this)
+	return setTimeout(again, 200)
 }

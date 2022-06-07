@@ -1,33 +1,29 @@
-// insert.js
-// modifying the turntable DOM
-
-module.exports = {
-
-	$body (name, on) { // DOM body classes
-		let has = $("body").hasClass(name)
-		if (on && !has) $("body").addClass(name)
-		if (!on && has) $("body").removeClass(name)
-	},
-
-	$sheet (path = "#", type) { // insert a stylesheet
-		// if we have a type, only include one
-		let curr = type ? $(`#${ type }`) : false
-		if (path != "#") this.$debug(`Inserting Stylesheet`, { path, type })
-		if (curr && curr.length) curr.attr("href", path)
-		else document.head.append( SHEET_HTML(path, type) )
-	},
-
-	$style (style = "", type) { // inject style tags 
-		// if we have a type, only include one set
-		let curr = type ? $(`#${ type }`)[0] : false
-		if (style) this.$debug(`Injecting CSS`, { style, type })
-		if (curr) curr.innerHTML = style
-		else document.head.append( STYLE_HTML(style, type) )
-	}
-
+// toggle classes on the DOM body
+export const bodyClass = function (name, on) {
+	let has = $("body").hasClass(name)
+	if (on && !has) $("body").addClass(name)
+	if (!on && has) $("body").removeClass(name)
 }
 
-const SHEET_HTML = (path, type) => {
+// insert a stylesheet
+export const insertSheet = function (path = "#", type) { 
+	if (path != "#") this.debug(`Inserting Stylesheet`, { path, type })
+	// if we have a type, only include one
+	let curr = type ? $(`#${ type }`) : false
+	if (curr && curr.length) curr.attr("href", path)
+	else document.head.append( sheetHTML(path, type) )
+}
+
+// inject css into style tags 
+export const injectStyle = function (style = "", type) { 
+	if (style) this.debug(`Injecting CSS`, { style, type })
+	// if we have a type, only include one set
+	let curr = type ? $(`#${ type }`)[0] : false
+	if (curr) curr.innerHTML = style
+	else document.head.append( styleHTML(style, type) )
+}
+
+const sheetHTML = (path, type) => {
 	let elem = document.createElement("link")
 	if (type) elem.id = type
 	elem.type = "text/css"
@@ -36,7 +32,7 @@ const SHEET_HTML = (path, type) => {
 	return elem
 }
 
-const STYLE_HTML = (style, type) => {
+const styleHTML = (style, type) => {
 	let elem = document.createElement("style")
 	if (type) elem.id = type
 	elem.type = "text/css"

@@ -1,20 +1,17 @@
-// looped.js
-// doing something every minute
+export const beat = 0
 
-module.exports = {
+// fires every minute
+const loop = function () {
+	this.beat += 1
+	let data = { beat: this.beat }
+	this.emit("loop", data)
+}
 
-	__beat: 0,
+export const BindLoop = function () {
+	let looping = loop.bind(this)
+	this.looped = setInterval(looping, 60 * 1000)
+}
 
-	__looped () {
-		this.__beat += 1
-		let data = { beat: this.__beat }
-		this.$emit("loop", data)
-	},
-
-	__bindLooped () {
-		let time = 60 * 1000 // one minute
-		let loop = this.__looped.bind(this)
-		this.__loop = setInterval(loop, time)
-	}
-
+export const UnbindLoop = function () {
+	clearInterval(this.looped)
 }

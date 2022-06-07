@@ -1,42 +1,48 @@
-// logger.js
-// handles printing logs
+export let logs = []
 
-module.exports = {
-
-	$logs: [],
-
-	$debug (text, data) {
-		this.__log("debug", text, data)
-	},
-
-	$print (text, data) {
-		this.__log("print", text, data)
-	},
-
-	$error (text, data) {
-		this.__log("error", text, data)
-	},
-
-	__log (type, text, data) {
-		let time = new Date().toLocaleTimeString("en-us").split(" ")[0]
-		this.$logs.push({ type, text, data, time })
-		this.$emit("log", { type, text, data, time })
-		if (type == "debug" && !this.debugging) return
-		let send = [ LOG( time, this.label, text ), CSS[ type ] ]
-		if (data) send.push(type == "error" ? data : { data })
-		if (type == "error") return console.error( ...send )
-		if (type == "debug") return console.info( ...send )
-		if (type == "print") return console.log( ...send )
-	}
-
+// fires console.log when this.debugging = true
+export const debug = function (text, data) {
+	let log = { type: "debug", data: { data }, text }
+	return this.Logger(log, "color: grey;")
 }
 
-const LOG = (time, label, text) => {
-	return `%c${ label } (${ time }) :: ${ text }`
+// fires console.info any time it's called
+export const print = function (text, data) {
+	let log = { type: "print", data: { data }, text }
+	return this.Logger(log, "font-weight: bold;")
 }
 
-const CSS = {
-	debug: "color: grey;",
-	print: "font-weight: bold;",
-	error: "font-weight: bold;"
+// fires console.error whenever called
+export const error = function (text, data) {
+	let log = { type: "error", data, text }
+	return this.Logger(log, "font-weight: bold;")
+}
+
+// formats and prints our internal logs
+export const Logger = function (log, css) {
+	log.time = loggerTime() // add a timestamp
+	// push and emit for every log we receive
+	this.logs.push(log); this.emit("log", log)
+	// don't debug to console if we aren't debugging
+	if (log.type == "debug" && !this.debugging) return
+	// otherwise print log to console
+	let args = loggerArgs(this.label, log, css)
+	if (log.type == "error") console.error(...args)
+	if (log.type == "print") console.info(...args)
+	if (log.type == "debug") console.log(...args)
+}
+
+const loggerTime = () => {
+	let time = new Date().toLocaleTimeString("en-US")
+	return time.split(" ")[0] // remove AM/PM from string
+}
+
+const loggerArgs = (label, log, css) => {
+	let args = [ loggerText(label, log), css ]
+	if (log.data) args.push(log.data)
+	return args
+}
+
+const loggerText = (label, log) => {
+	return `%c${ label } (${ log.time }) :: ${ log.text }`
 }

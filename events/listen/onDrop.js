@@ -1,16 +1,13 @@
-// listen/onDrop.js
-// handling a DJ leaving the deck
-
-module.exports = function (event) {
+export default onDrop = event => {
 	for (let user of event.user) {
 		let data = {
-			self: user.userid == this.$user().id,
-			stat: this.__cacheDrop(user.userid),
+			self: user.userid == this.user.id,
+			stat: this.RecordDrop(user.userid),
 			user: { id: user.userid, name: user.name },
 			raw: event
 		}
 
-		this.$debug(`[drop] ${ user.name }`, data)
-		this.$emit("drop", data)
+		this.debug(`[drop] ${ user.name }`, data)
+		this.emit("drop", data)
 	}
 }
